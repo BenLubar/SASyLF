@@ -7,15 +7,23 @@ public class Location {
 	public Location(Token t) {
 		beginLine = t.beginLine;
 		beginColumn = t.beginColumn;
+		endLine = t.endLine;
+		endColumn = t.endColumn;
 		file = DSLToolkitParser.currentFile;
 	}
 	public int getLine() {
 		return beginLine;
 	}
+	public int getEndLine() {
+		return endLine;
+	}
 	public int getColumn() {
 		return beginColumn;
 	}
-	private int beginLine, beginColumn /*, endLine, endColumn*/;
+	public int getEndColumn() {
+		return endColumn;
+	}
+	private int beginLine, beginColumn, endLine, endColumn;
 	private String file;
 
 	public String toString() {

@@ -62,7 +62,8 @@ public class CheckProofsAction implements IWorkbenchWindowActionDelegate {
 			marker = res.createMarker(MARKER_ID);
 			marker.setAttribute(IMarker.MESSAGE, report.getShortMessage());
 			marker.setAttribute(IMarker.LINE_NUMBER, report.loc.getLine());
-			// marker.setAttribute(IMarker.CHAR_START, report.loc.getColumn());
+			marker.setAttribute(IMarker.CHAR_START, report.loc.getColumn());
+			marker.setAttribute(IMarker.CHAR_END, report.loc.getEndColumn());
 			marker.setAttribute(IMarker.SEVERITY,
 					report.isError ? IMarker.SEVERITY_ERROR
 							: IMarker.SEVERITY_WARNING);
