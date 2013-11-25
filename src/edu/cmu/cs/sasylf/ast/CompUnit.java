@@ -107,7 +107,7 @@ public class CompUnit extends Node {
 	public void typecheck(Context ctx) {
 		for (Syntax syn: syntax) {
 			if (declaredTerminals.contains(syn.getNonTerminal().getSymbol()))
-				ErrorHandler.report("Syntax nonterminal " + syn.getNonTerminal().getSymbol() + " may not appear in the terminals list", syn);
+				ErrorHandler.report(Errors.NONTERMINAL_TERMINAL, "Syntax nonterminal " + syn.getNonTerminal().getSymbol() + " may not appear in the terminals list", syn);
 			syn.computeVarTypes(ctx.varMap);
 			ctx.synMap.put(syn.getNonTerminal().getSymbol(), syn);
 		}
@@ -119,7 +119,7 @@ public class CompUnit extends Node {
 		// check if useless
 		for (Syntax syn : syntax) {
 		  if (!syn.isProductive()) {
-		    ErrorHandler.recoverableError("Syntax is unproductive.  You need a production that can actually generate a string.", syn);
+		    ErrorHandler.recoverableError(Errors.SYNTAX_UNPRODUCTIVE, "Syntax is unproductive.  You need a production that can actually generate a string.", syn);
 		  }
 		}
 

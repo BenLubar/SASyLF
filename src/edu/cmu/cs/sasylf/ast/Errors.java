@@ -48,8 +48,13 @@ public enum Errors {
 	INVERSION_NOT_FOUND("did not find claimed judgment in inversion of rule"),
 	WEIRD_ADAPT_ERROR("internal error in adapt"),
 	MUTUAL_INDUCTION_NO_INDUCTION("mutual induction cannot be used without an inductive argument"),
-  MUTUAL_NOT_SUBDERIVATION   ("argument to mutual induction must be a subderivation of theorem induction"),
-  MUTUAL_NOT_EARLIER ("if inductive argument is unchanged, the mutual induction must be to an earlier theorem"),
+	MUTUAL_NOT_SUBDERIVATION   ("argument to mutual induction must be a subderivation of theorem induction"),
+	MUTUAL_NOT_EARLIER ("if inductive argument is unchanged, the mutual induction must be to an earlier theorem"),
+	NONTERMINAL_TERMINAL,
+	SYNTAX_UNPRODUCTIVE,
+	AND_CONTEXTS_DIFFER,
+	AND_ASSUMES_DIFFER,
+	BINDING_NOT_NONTERMINAL,
 	;
 
 	Errors() {

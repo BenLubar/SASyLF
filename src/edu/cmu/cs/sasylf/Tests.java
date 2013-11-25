@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
@@ -41,14 +40,18 @@ public class Tests {
 
 	@Test
 	public void bad() throws IOException, ParseException {
+		boolean hasError = false;
+		
 		PrintStream err = System.err;
 		try {
 			System.setErr(new PrintStream("regression.log"));
 			File regression = new File("regression");
 			for (File f : regression.listFiles()) {
 				if (f.getName().startsWith("bad")) {
-					if (DSLToolkitParser.read(f).typecheck())
+					if (DSLToolkitParser.read(f).typecheck()) {
 						err.println("Test case " + f + " did not have errors.");
+						hasError = true;
+					}
 				}
 			}
 		} finally {
@@ -57,11 +60,20 @@ public class Tests {
 
 		Set<Errors> seen = new HashSet<Errors>();
 		for (ErrorReport report : ErrorHandler.getReports()) {
-			assertNotNull("\"" + report.getMessage() + "\" has no errorType", report.errorType);
-			seen.add(report.errorType);
+			if (report.errorType == null) {
+				System.err.println("\"" + report.getMessage() + "\" has no errorType");
+				hasError = true;
+			} else {
+				seen.add(report.errorType);
+			}
 		}
 		for (Errors error : Errors.values()) {
-			assertTrue("Error " + error.name() + " not tested", seen.contains(error));
+			if (!seen.contains(error)) {
+				System.err.println("Error " + error.name() + " not tested");
+				hasError = true;
+			}
 		}
+
+		if (hasError) fail();
 	}
 }

@@ -78,12 +78,12 @@ public class AndJudgment extends Judgment {
     return sb.toString();
   }
   
-  private static Clause makeForm(Location l, List<Judgment> parts) {
-    Clause result = new Clause(l);
+  private static Clause makeForm(Location loc, List<Judgment> parts) {
+    Clause result = new Clause(loc);
     boolean started = false;
     NonTerminal context = null;
     for (Judgment j : parts) {
-      if (started) result.getElements().add(makeAndTerminal(l));
+      if (started) result.getElements().add(makeAndTerminal(loc));
       else started = true;
       for (Element e : j.getForm().getElements()) {
         if (e instanceof NonTerminal && ((NonTerminal)e).getType().isInContextForm()) {
@@ -91,7 +91,7 @@ public class AndJudgment extends Judgment {
             context = (NonTerminal)e;
           } else {
             if (!context.equals(e)) {
-              ErrorHandler.report("All contexts in an 'and' judgment must be the same", l);
+              ErrorHandler.report(Errors.AND_CONTEXTS_DIFFER, "All contexts in an 'and' judgment must be the same", loc, null, true, true);
             }
           }
         }
@@ -108,7 +108,7 @@ public class AndJudgment extends Judgment {
       if (a != null) {
         if (result == null) result = a;
         else if (!result.equals(a)) {
-          ErrorHandler.report("cannot conjoin judgments with different assumptions", loc);
+          ErrorHandler.report(Errors.AND_ASSUMES_DIFFER, "cannot conjoin judgments with different assumptions", loc, null, true, true);
         }
       }
     }
