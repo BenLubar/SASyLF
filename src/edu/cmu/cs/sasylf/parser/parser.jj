@@ -1681,11 +1681,11 @@ Derivation Justification(Token startT, Clause c) :
     { return d; }
   | LOOKAHEAD(2) <INDUCTION> <ON> t=<IDENTIFIER> <COLON>
     { di = new DerivationByInduction(startT.image, new Location(startT), c, t.image); }
-    ( ca=Case() { if (ca != null) di.getCases().add(ca); })+
+    ( ca=Case() { if (ca != null) di.getCases().add(ca); })*
     of=<END> 
     (<INDUCTION> |
      (LOOKAHEAD(2) <CASE> <ANALYSIS> | <CASE> | <LEMMA> | <THEOREM>)
-     { ErrorHandler.recoverableError("expected 'end case analysis'",new Location(of)); } )
+     { ErrorHandler.recoverableError("expected 'end induction'",new Location(of)); } )
     { return di; }
   | <CASE> <ANALYSIS> <ON> t=<IDENTIFIER> <COLON>
     { dca = new DerivationByCaseAnalysis(startT.image, new Location(startT), c, t.image); }

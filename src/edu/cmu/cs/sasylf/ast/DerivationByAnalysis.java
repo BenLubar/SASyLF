@@ -218,16 +218,23 @@ public abstract class DerivationByAnalysis extends Derivation {
 		for (Case c : cases) {
 			c.typecheck(ctx, isSubderivation);
 		}
-		
+
+		edu.cmu.cs.sasylf.util.SASyLFError missingCase = null;
 		for (Map.Entry<CanBeCase, Set<Pair<Term,Substitution>>> entry : ctx.caseTermMap.entrySet()) {
 			if (!entry.getValue().isEmpty()) {
 				CanBeCase cbc = entry.getKey();
-				ErrorHandler.report(Errors.MISSING_CASE,
-									cbc.getErrorDescription(entry.getValue().iterator().next().first, ctx)/* + ": case is " + ctx.currentCaseAnalysis.substitute(sub)
-									+ "\n\trule conc was " + arguments.get(lastIdx)*/, this);				
+				try {
+					ErrorHandler.report(Errors.MISSING_CASE, cbc.getErrorDescription(entry.getValue().iterator().next().first, ctx), this);
+				} catch (edu.cmu.cs.sasylf.util.SASyLFError ex) {
+					// report all, throw last.
+					missingCase = ex;
+				}
 			}
 		}
-		
+		if (missingCase != null) {
+			throw missingCase;
+		}
+
 		/*if (!(ctx.currentCaseAnalysisElement instanceof NonTerminal) && !ctx.caseTermMap.isEmpty()) {
 			Rule rule = ctx.caseTermMap.keySet().iterator().next();
 			ErrorHandler.report(Errors.MISSING_CASE,
